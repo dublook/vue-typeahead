@@ -1,10 +1,11 @@
 import { util } from 'vue'
 
 export default {
+  props: ['value'],
   data () {
     return {
       items: [],
-      query: '',
+      // query: '',
       current: -1,
       loading: false,
       selectFirst: false,
@@ -18,11 +19,11 @@ export default {
     },
 
     isEmpty () {
-      return !this.query
+      return !this.value
     },
 
     isDirty () {
-      return !!this.query
+      return !!this.value
     }
   },
 
@@ -30,18 +31,18 @@ export default {
     update () {
       this.cancel()
 
-      if (!this.query) {
+      if (!this.value) {
         return this.reset()
       }
 
-      if (this.minChars && this.query.length < this.minChars) {
+      if (this.minChars && this.value.length < this.minChars) {
         return
       }
 
       this.loading = true
 
       this.fetch().then((response) => {
-        if (response && this.query) {
+        if (response && this.value) {
           let data = response.data
           data = this.prepareResponseData ? this.prepareResponseData(data) : data
           this.items = this.limit ? data.slice(0, this.limit) : data
@@ -66,10 +67,10 @@ export default {
 
       const src = this.queryParamName
         ? this.src
-        : this.src + this.query
+        : this.src + this.value
 
       const params = this.queryParamName
-        ? Object.assign({ [this.queryParamName]: this.query }, this.data)
+        ? Object.assign({ [this.queryParamName]: this.value }, this.data)
         : this.data
 
       let cancel = new Promise((resolve) => this.cancel = resolve)
@@ -84,7 +85,7 @@ export default {
 
     reset () {
       this.items = []
-      this.query = ''
+      this.value = ''
       this.loading = false
     },
 
