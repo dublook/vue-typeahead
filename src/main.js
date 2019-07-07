@@ -5,7 +5,7 @@ export default {
   data () {
     return {
       items: [],
-      // query: '',
+      query: this.value,
       current: -1,
       loading: false,
       selectFirst: false,
@@ -19,11 +19,11 @@ export default {
     },
 
     isEmpty () {
-      return !this.value
+      return !this.query
     },
 
     isDirty () {
-      return !!this.value
+      return !!this.query
     }
   },
 
@@ -31,18 +31,18 @@ export default {
     update () {
       this.cancel()
 
-      if (!this.value) {
+      if (!this.query) {
         return this.reset()
       }
 
-      if (this.minChars && this.value.length < this.minChars) {
+      if (this.minChars && this.query.length < this.minChars) {
         return
       }
 
       this.loading = true
 
       this.fetch().then((response) => {
-        if (response && this.value) {
+        if (response && this.query) {
           let data = response.data
           data = this.prepareResponseData ? this.prepareResponseData(data) : data
           this.items = this.limit ? data.slice(0, this.limit) : data
@@ -67,10 +67,10 @@ export default {
 
       const src = this.queryParamName
         ? this.src
-        : this.src + this.value
+        : this.src + this.query
 
       const params = this.queryParamName
-        ? Object.assign({ [this.queryParamName]: this.value }, this.data)
+        ? Object.assign({ [this.queryParamName]: this.query }, this.data)
         : this.data
 
       let cancel = new Promise((resolve) => this.cancel = resolve)
@@ -85,7 +85,7 @@ export default {
 
     reset () {
       this.items = []
-      this.value = ''
+      this.query = ''
       this.loading = false
     },
 

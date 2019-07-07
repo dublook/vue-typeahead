@@ -25,7 +25,7 @@ exports.default = {
   data: function data() {
     return {
       items: [],
-
+      query: this.value,
       current: -1,
       loading: false,
       selectFirst: false,
@@ -39,10 +39,10 @@ exports.default = {
       return this.items.length > 0;
     },
     isEmpty: function isEmpty() {
-      return !this.value;
+      return !this.query;
     },
     isDirty: function isDirty() {
-      return !!this.value;
+      return !!this.query;
     }
   },
 
@@ -52,18 +52,18 @@ exports.default = {
 
       this.cancel();
 
-      if (!this.value) {
+      if (!this.query) {
         return this.reset();
       }
 
-      if (this.minChars && this.value.length < this.minChars) {
+      if (this.minChars && this.query.length < this.minChars) {
         return;
       }
 
       this.loading = true;
 
       this.fetch().then(function (response) {
-        if (response && _this.value) {
+        if (response && _this.query) {
           var data = response.data;
           data = _this.prepareResponseData ? _this.prepareResponseData(data) : data;
           _this.items = _this.limit ? data.slice(0, _this.limit) : data;
@@ -87,9 +87,9 @@ exports.default = {
         return _vue.util.warn('You need to set the `src` property', this);
       }
 
-      var src = this.queryParamName ? this.src : this.src + this.value;
+      var src = this.queryParamName ? this.src : this.src + this.query;
 
-      var params = this.queryParamName ? (0, _assign2.default)((0, _defineProperty3.default)({}, this.queryParamName, this.value), this.data) : this.data;
+      var params = this.queryParamName ? (0, _assign2.default)((0, _defineProperty3.default)({}, this.queryParamName, this.query), this.data) : this.data;
 
       var cancel = new _promise2.default(function (resolve) {
         return _this2.cancel = resolve;
@@ -101,7 +101,7 @@ exports.default = {
     cancel: function cancel() {},
     reset: function reset() {
       this.items = [];
-      this.value = '';
+      this.query = '';
       this.loading = false;
     },
     setActive: function setActive(index) {
